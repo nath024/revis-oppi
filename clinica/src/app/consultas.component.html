@@ -1,0 +1,64 @@
+<h1>Clínica Médica - Consultas</h1>
+
+<form [formGroup]="form" (ngSubmit)="cadastrar()">
+  <div class="campo">
+    <label for="paciente">Paciente</label>
+    <input id="paciente" type="text" formControlName="paciente" />
+    @if (form.controls.paciente.touched && form.controls.paciente.invalid) {
+      <small class="erro">Informe o nome (mínimo 3 caracteres).</small>
+    }
+  </div>
+
+  <div class="campo">
+    <label for="data">Data</label>
+    <input id="data" type="date" formControlName="data" />
+    @if (form.controls.data.touched && form.controls.data.invalid) {
+      <small class="erro">Informe a data da consulta.</small>
+    }
+  </div>
+
+  <div class="campo">
+    <label for="preco">Preço (R$)</label>
+    <input id="preco" type="number" step="0.01" formControlName="preco" />
+    @if (form.controls.preco.touched && form.controls.preco.invalid) {
+      <small class="erro">O preço deve ser maior que zero.</small>
+    }
+  </div>
+
+  <button type="submit">Cadastrar consulta</button>
+  <button type="button" class="secundario" (click)="carregarExemplos()">
+    Carregar 4 exemplos
+  </button>
+  <button type="button" class="secundario" (click)="limpar()">Limpar lista</button>
+</form>
+
+<h2>Consultas cadastradas</h2>
+
+@if (consultas().length === 0) {
+  <p>Nenhuma consulta cadastrada.</p>
+} @else {
+  <table>
+    <thead>
+      <tr>
+        <th>Paciente</th>
+        <th>Data</th>
+        <th>Preço</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (c of consultas(); track $index) {
+        <tr>
+          <td>{{ c.paciente }}</td>
+          <td>{{ c.data | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ c.preco | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</td>
+        </tr>
+      }
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2"><strong>Total apurado</strong></td>
+        <td><strong>{{ total() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong></td>
+      </tr>
+    </tfoot>
+  </table>
+}
